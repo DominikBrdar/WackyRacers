@@ -8,8 +8,14 @@
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
+![Aa]ssets/Scripts
+![Aa]ssets/Scenes
+![Aa]ssets/Materials
+![Aa]ssets/Props
+![Aa]ssets/Prefabs
 
 [Aa]ssets/AssetStoreTools*
+
 
 # Visual Studio cache directory
 .vs/
