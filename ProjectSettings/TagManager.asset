@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CinemachineTarget
   - Car
+  - SpeedDown
+  - SpeedUp
   layers:
   - Default
   - TransparentFX

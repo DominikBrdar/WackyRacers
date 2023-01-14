@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PowerupMaterial
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ValidKeywords:
+  m_Name: PowerupMaterialInverted
+  m_Shader: {fileID: 4800000, guid: 723c0830612473744a6c8245fcd2fe60, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _GLOSSYREFLECTIONS_OFF
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -104,6 +104,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
+    - _Threshold: 0.604
     - _UVSec: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
