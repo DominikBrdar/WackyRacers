@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUp : MonoBehaviour
+public class SpeedPowerUp : MonoBehaviour
 {
     public GameObject pickupEffect;
 
@@ -26,7 +26,14 @@ public class PowerUp : MonoBehaviour
         PickupStatus status = player.GetComponentInParent<PickupStatus>();
         if (status is not null)
         {
-            status.Increment();
+            if (this.tag == "SpeedUp")
+            {
+                status.Increment();
+            }
+            if (this.tag == "SpeedDown")
+            {
+                status.Decrement();
+            }
         }
 
         // destory powerup
