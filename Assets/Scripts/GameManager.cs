@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 
+    public Button StartButton;
+    public Button ExitButton;
     public Transform checkpoints;
     public Transform cars;
     public Canvas canvas;
+    public Canvas canvasLoading;
     public Text Place;
     public Text Lap;
     public int NumberOfLaps;
@@ -23,7 +28,61 @@ public class GameManager : MonoBehaviour
         // set number of laps
         Lap.transform.GetChild(0).GetComponent<Text>().text = "/" + NumberOfLaps;
         Lap.text = "" + lap;
+
+        StartButton.onClick.AddListener(startSimulation);
+
+        ExitButton.onClick.AddListener(() => Application.Quit());
+        useUICanvas(true);
+
         // TODO (dominik) initial place (depends on other cars)
+    }
+
+    void startSimulation()
+    {
+        /* TODO Stvaranje protivnika, nije dovrseno
+        EntryBehaviour[] entryB = Content.GetComponentsInChildren<EntryBehaviour>();
+        enemiesContainer = new GameObject("Enemies");
+        enemiesContainer.transform.SetParent(Simulation.transform);
+        enemiesContainer.SetActive(true);
+
+        for (int i = 0; i < entryB.Length; i++)
+        {
+            // inicijalizacija puta, ako put nije zadan -> zanemari objekt
+            if (entryB[i].path.Count < 1) continue;
+            var enemy = Instantiate(Enemy);
+            enemy.transform.SetParent(enemiesContainer.transform);
+            enemy.GetComponent<EnemyBehaviour>().path = entryB[i].path;
+
+            // inicijalizacija modela
+            Instantiate(EnemyModels.transform.GetChild(entryB[i].Model.value).gameObject).transform.SetParent(enemy.transform);
+            enemy.transform.position = entryB[i].path[0];
+
+            enemy.SetActive(true);
+        }
+        */
+
+        useUICanvas(false);
+        
+        GetComponent<Rigidbody>().ResetInertiaTensor();
+        transform.position = new Vector3(22, 0, 22);
+        transform.rotation = new Quaternion(0, 1, 0, 1);
+        SceneManager.LoadScene("FirstTrack");
+
+        // TODO pokreni utrku
+        //
+
+    }
+
+    public void useUICanvas(bool b)
+    {
+        if (b)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
+
+        canvas.enabled = b;
+        Cursor.visible = b;
+        canvasLoading.enabled = !b;
     }
 
     // Update is called once per frame
@@ -56,13 +115,18 @@ public class GameManager : MonoBehaviour
                         Lap.text = "" + lap;
                     }
                 }
-                
+
                 Debug.Log(current + ". dio staze");
             }
         }
 
         updatePlace();
-        
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            useUICanvas(true);
+        }
+
     }
 
     void returnToTrack()
@@ -103,6 +167,7 @@ public class GameManager : MonoBehaviour
             Place.text = "" + place + "th";
         }
     }
+
 }
 
 
