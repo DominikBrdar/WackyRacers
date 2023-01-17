@@ -27,6 +27,7 @@ public class PlayerSpawnerPrototype : SpawnerPrototype<PlayerSpawnPointPrototype
     base.RegisterPlayerAndObject(player, playerObject);
 
     Runner.SetPlayerObject(player, playerObject);
+
   }
 
 }

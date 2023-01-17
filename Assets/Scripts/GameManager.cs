@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
+    public NetworkRunner netRunner;
     public Button StartButton;
     public Button ExitButton;
     public Transform checkpoints;
@@ -90,7 +91,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (this.transform.position.y < -10)
+        
+        if (player.position.y < -10)
         {
             returnToTrack();
         }
@@ -146,10 +148,12 @@ public class GameManager : MonoBehaviour
         // treba provjeriti prvo krug, onda checkpoint i onda ovo
         // TODO (dominik)
         place = 1;
-        foreach (Transform t in cars)
+        GameObject[] cars = GameObject.FindGameObjectsWithTag("Player");
+        Transform t;
+        for (int i = 0; i < cars.Length; i++)
         {
-            d3 = Vector3.Distance(t.position, checkpoints.GetChild(current).position);
-            d4 = Vector3.Distance(t.position, checkpoints.GetChild(next).position);
+            d3 = Vector3.Distance(cars[i].transform.position, checkpoints.GetChild(current).position);
+            d4 = Vector3.Distance(cars[i].transform.position, checkpoints.GetChild(next).position);
             if (d4 < d3)
             {
                 place++;
