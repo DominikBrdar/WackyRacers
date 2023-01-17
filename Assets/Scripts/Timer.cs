@@ -7,7 +7,7 @@ public class Timer : MonoBehaviour
 {
     float currentTime;
     public int startingTime = 5;
-    private GameObject player;
+    private GameObject[] players;
 
     bool freeze = true;
     float originalDrag;
@@ -16,8 +16,8 @@ public class Timer : MonoBehaviour
     void Start()
     {
         currentTime = startingTime;
-        player = GameObject.FindGameObjectWithTag("PlayerCont");
-        originalDrag = player.GetComponent<Rigidbody>().drag;
+        players = GameObject.FindGameObjectsWithTag("PlayerCont");
+        originalDrag = players[0].GetComponent<Rigidbody>().drag;
         InvokeRepeating("Count", 1.0f, 1.0f);
     }
 
@@ -25,7 +25,11 @@ public class Timer : MonoBehaviour
     {
         if (freeze)
         {
-            player.GetComponent<Rigidbody>().drag = 9999;
+            foreach (GameObject player in players)
+            {
+                player.GetComponent<Rigidbody>().drag = 9999;
+            }
+            
         }
         
     }
@@ -43,7 +47,10 @@ public class Timer : MonoBehaviour
 
             // unfreeze players
             freeze = false;
-            player.GetComponent<Rigidbody>().drag = originalDrag;
+            foreach (GameObject player in players)
+            {
+                player.GetComponent<Rigidbody>().drag = originalDrag;
+            }
         }
     }
 
