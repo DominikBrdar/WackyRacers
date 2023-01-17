@@ -160,6 +160,7 @@ public class PrometeoCarController : NetworkTransform
       float RRWextremumSlip;
 
     private GameObject[] Cars;
+    public bool isActive = false;
 
     // Start is called before the first frame update
     void Start()
@@ -267,17 +268,21 @@ public class PrometeoCarController : NetworkTransform
         if (Cars.Length == 2)
         { // when other player is loaded
             // deactivate it's camera
-            Cars[1].transform.GetChild(0).GetChild(1).gameObject.active = false;
-
+            transform.GetChild(0).GetChild(1).gameObject.active = false;
         }
-        Debug.Log("number of cars = " + Cars.Length);
-
+        else
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().player = transform;
+            carSpeedText = GameObject.Find("SpeedText").GetComponent<Text>();
+        }
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().InitRank();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+        if (!isActive) return;
       //CAR DATA
 
       // We determine the speed of the car.

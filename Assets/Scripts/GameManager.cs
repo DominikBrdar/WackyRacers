@@ -18,11 +18,14 @@ public class GameManager : MonoBehaviour
     public Transform FinishLine;
     public Canvas CanvasUI;
     public Canvas canvasLoading;
+    public Canvas CanvasCountdown;
     public Text Place;
     public Text Lap;
+    public Text Speed;
     public int NumberOfLaps;
 
     private LinkedList<GameObject> Cars;
+    private bool startRace = true;
 
     float d1, d2, d3, d4;
     int current = 0, next = 1;
@@ -42,10 +45,9 @@ public class GameManager : MonoBehaviour
         //useUICanvas(false);
         CanvasUI.enabled = false;
         canvasLoading.enabled = true;
+        CanvasCountdown.enabled = false;
         // TODO (dominik) initial place (depends on other cars)
-        Cars = new LinkedList<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
 
-        Debug.Log("number of cars = " + Cars.Count);
     }
 
     void startGame()
@@ -99,47 +101,57 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (player.position.y < -10)
-        {
-            returnToTrack();
-        }
-        // TODO (dominik) dodati return to track kada se stisne i drzi space
-
-        d1 = Vector3.Distance(player.position, checkpoints.GetChild(current).position);
-        d2 = Vector3.Distance(player.position, checkpoints.GetChild(next).position);
-        if (d1 < d2)
-        {
-            if (d2 < 24)
-            {
-                current = next;
-                next++;
-                if (next == checkpoints.childCount)
-                {
-                    next = 0;
-                    Debug.Log("presao si krug");
-                    if (++lap > NumberOfLaps)
-                    {
-                        //TODO (dominik) utrka zavrsena
-                    }
-                    else
-                    {
-                        Lap.text = "" + lap;
-                    }
-                }
-
-                Debug.Log(current + ". dio staze");
-            }
-        }
-
-        updatePlace();
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             useUICanvas(true);
         }
 
+        if (Cars is null)
+        {
+            return;
+        }
 
+        if (player)
+        {
+            if (startRace)
+            {
+                startRace = false;
+                StartCoroutine(StartRaceCountdown());
+            }
+            if (player.position.y < -10)
+            {
+                returnToTrack();
+            }
+            // TODO (dominik) dodati return to track kada se stisne i drzi space
+
+            d1 = Vector3.Distance(player.position, checkpoints.GetChild(current).position);
+            d2 = Vector3.Distance(player.position, checkpoints.GetChild(next).position);
+            if (d1 < d2)
+            {
+                if (d2 < 24)
+                {
+                    current = next;
+                    next++;
+                    if (next == checkpoints.childCount)
+                    {
+                        next = 0;
+                        Debug.Log("presao si krug");
+                        if (++lap > NumberOfLaps)
+                        {
+                            //TODO (dominik) utrka zavrsena
+                        }
+                        else
+                        {
+                            Lap.text = "" + lap;
+                        }
+                    }
+
+                    Debug.Log(current + ". dio staze");
+                }
+            }
+
+            updatePlace();
+        }
     }
 
     void returnToTrack()
@@ -158,7 +170,6 @@ public class GameManager : MonoBehaviour
         // TODO (dominik)
         place = 1;
         
-        Transform t;
         foreach(GameObject c in Cars)
         {
             d3 = Vector3.Distance(c.transform.position, checkpoints.GetChild(current).position);
@@ -183,6 +194,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void InitRank()
+    {
+        Cars = new LinkedList<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+        updatePlace();
+    }
+
+    IEnumerator StartRaceCountdown()
+    {
+        player.GetComponent<PrometeoCarController>().isActive= false;
+        CanvasCountdown.enabled = true;
+        CanvasCountdown.GetComponentInChildren<Text>().text = "3";
+        yield return new WaitForSecondsRealtime(1);
+        CanvasCountdown.GetComponentInChildren<Text>().text = "2";
+        yield return new WaitForSecondsRealtime(1);
+        CanvasCountdown.GetComponentInChildren<Text>().text = "1";
+        yield return new WaitForSecondsRealtime(1);
+        CanvasCountdown.GetComponentInChildren<Text>().text = "Go!";
+        player.GetComponent<PrometeoCarController>().isActive = true;
+        yield return new WaitForSecondsRealtime(1);
+        CanvasCountdown.enabled = false;
+    }
 }
 
 
