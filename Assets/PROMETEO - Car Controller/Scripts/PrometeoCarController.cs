@@ -159,6 +159,8 @@ public class PrometeoCarController : NetworkTransform
       WheelFrictionCurve RRwheelFriction;
       float RRWextremumSlip;
 
+    private GameObject[] Cars;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -260,6 +262,15 @@ public class PrometeoCarController : NetworkTransform
             Debug.LogWarning(ex);
           }
         }
+
+        Cars = GameObject.FindGameObjectsWithTag("Player");
+        if (Cars.Length == 2)
+        { // when other player is loaded
+            // deactivate it's camera
+            Cars[1].transform.GetChild(0).GetChild(1).gameObject.active = false;
+
+        }
+        Debug.Log("number of cars = " + Cars.Length);
 
     }
 
@@ -368,7 +379,8 @@ public class PrometeoCarController : NetworkTransform
 
 
       // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
-      //AnimateWheelMeshes();
+      //if (Cars.Length != 2) 
+      //  AnimateWheelMeshes();
 
     }
 
