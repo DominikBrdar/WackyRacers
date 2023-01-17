@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public Button ExitButton;
     public Transform checkpoints;
     public Transform cars;
+    public Transform player;
     public Canvas canvas;
     public Canvas canvasLoading;
     public Text Place;
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // set number of laps
+        
         Lap.transform.GetChild(0).GetComponent<Text>().text = "/" + NumberOfLaps;
         Lap.text = "" + lap;
 
@@ -63,9 +65,9 @@ public class GameManager : MonoBehaviour
 
         useUICanvas(false);
         
-        GetComponent<Rigidbody>().ResetInertiaTensor();
-        transform.position = new Vector3(22, 0, 22);
-        transform.rotation = new Quaternion(0, 1, 0, 1);
+        player.GetComponent<Rigidbody>().ResetInertiaTensor();
+        player.position = new Vector3(22, 0, 22);
+        player.rotation = new Quaternion(0, 1, 0, 1);
         SceneManager.LoadScene("FirstTrack");
 
         // TODO pokreni utrku
@@ -94,8 +96,8 @@ public class GameManager : MonoBehaviour
         }
         // TODO (dominik) dodati return to track kada se stisne i drzi space
 
-        d1 = Vector3.Distance(this.transform.position, checkpoints.GetChild(current).position);
-        d2 = Vector3.Distance(this.transform.position, checkpoints.GetChild(next).position);
+        d1 = Vector3.Distance(player.position, checkpoints.GetChild(current).position);
+        d2 = Vector3.Distance(player.position, checkpoints.GetChild(next).position);
         if (d1 < d2)
         {
             if (d2 < 24)
@@ -131,11 +133,11 @@ public class GameManager : MonoBehaviour
 
     void returnToTrack()
     {
-        GetComponent<Rigidbody>().ResetInertiaTensor();
-        GetComponent<Rigidbody>().isKinematic = true;
-        this.transform.position = checkpoints.GetChild(current).position;
-        this.transform.rotation = checkpoints.GetChild(current).rotation;
-        GetComponent<Rigidbody>().isKinematic = false;
+        player.GetComponent<Rigidbody>().ResetInertiaTensor();
+        player.GetComponent<Rigidbody>().isKinematic = true;
+        player.position = checkpoints.GetChild(current).position;
+        player.rotation = checkpoints.GetChild(current).rotation;
+        player.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     void updatePlace()
