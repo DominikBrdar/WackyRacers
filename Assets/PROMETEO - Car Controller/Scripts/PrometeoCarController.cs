@@ -269,19 +269,21 @@ public class PrometeoCarController : NetworkTransform
         { // when other player is loaded
             // deactivate it's camera
             transform.GetChild(0).GetChild(1).gameObject.active = false;
+            //GameObject.Find("GameManager").GetComponent<GameManager>().startRace = true;
         }
         else
         {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().player = transform;
+            // activate it's speedometer
             carSpeedText = GameObject.Find("SpeedText").GetComponent<Text>();
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().player = transform;
         }
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().InitRank();
     }
 
+    private bool flag = true;
     // Update is called once per frame
     void Update()
     {
-
         if (!isActive) return;
       //CAR DATA
 
@@ -788,5 +790,4 @@ public class PrometeoCarController : NetworkTransform
         driftingAxis = 0f;
       }
     }
-
 }

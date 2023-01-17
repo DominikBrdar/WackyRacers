@@ -1,5 +1,6 @@
 
 using Fusion;
+using UnityEngine;
 
 /// <summary>
 /// Prototyping component for spawning Player avatars.
@@ -27,8 +28,9 @@ public class PlayerSpawnerPrototype : SpawnerPrototype<PlayerSpawnPointPrototype
     base.RegisterPlayerAndObject(player, playerObject);
 
     Runner.SetPlayerObject(player, playerObject);
+    StartCoroutine(GameObject.Find("GameManager").GetComponent<GameManager>().StartRaceCountdown());
 
-  }
+    }
 
 }
 

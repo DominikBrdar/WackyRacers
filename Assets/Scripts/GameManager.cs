@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public int NumberOfLaps;
 
     private LinkedList<GameObject> Cars;
-    private bool startRace = true;
+    public bool startRace = true;
 
     float d1, d2, d3, d4;
     int current = 0, next = 1;
@@ -139,6 +139,12 @@ public class GameManager : MonoBehaviour
                         if (++lap > NumberOfLaps)
                         {
                             //TODO (dominik) utrka zavrsena
+                            CanvasUI.enabled = true;
+                            if (place == 1)
+                                CanvasUI.GetComponentInChildren<Text>().text = "You WON!";
+                            else
+                                CanvasUI.GetComponentInChildren<Text>().text = "You LOST";
+
                         }
                         else
                         {
@@ -200,7 +206,7 @@ public class GameManager : MonoBehaviour
         updatePlace();
     }
 
-    IEnumerator StartRaceCountdown()
+    public IEnumerator StartRaceCountdown()
     {
         player.GetComponent<PrometeoCarController>().isActive= false;
         CanvasCountdown.enabled = true;
